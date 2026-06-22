@@ -1,1 +1,424 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SlimSearch - Pobierz</title>
+    <style>
+        /* Resetowanie i podstawy */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
+        body {
+            background: #0b1120; /* Ciemne, granatowe tło pasujące do logo */
+            color: #e2e8f0;
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 40px;
+            border: 1px solid rgba(56, 189, 248, 0.15);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+        }
+
+        /* Nagłówek i Logo */
+        .header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .logo-container {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            border: 4px solid #38bdf8;
+            box-shadow: 0 0 30px rgba(56, 189, 248, 0.3);
+            overflow: hidden;
+            margin-bottom: 20px;
+            background: #0f172a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .logo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, #60a5fa, #38bdf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 1px;
+        }
+
+        .tagline {
+            font-size: 1.1rem;
+            color: #94a3b8;
+            margin-top: 8px;
+        }
+
+        /* Sekcja Treści */
+        .content {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        section {
+            background: rgba(15, 23, 42, 0.6);
+            padding: 20px;
+            border-radius: 16px;
+            border: 1px solid rgba(51, 65, 85, 0.5);
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            color: #f1f5f9;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #1e293b;
+            padding-bottom: 10px;
+        }
+
+        h2 i {
+            color: #38bdf8;
+        }
+
+        p {
+            line-height: 1.7;
+            color: #cbd5e1;
+            margin-bottom: 15px;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        @media (max-width: 600px) {
+            ul {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        ul li {
+            padding: 10px;
+            background: rgba(51, 65, 85, 0.3);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Sekcja Pobierania */
+        .download-box {
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.1), rgba(59, 130, 246, 0.05));
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            text-align: center;
+            padding: 30px;
+        }
+
+        .beta-status {
+            margin-bottom: 20px;
+            color: #facc15;
+            font-weight: 600;
+        }
+
+        .input-group {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        input[type="text"] {
+            padding: 12px 20px;
+            border-radius: 12px;
+            border: 1px solid #334155;
+            background: #1e293b;
+            color: #f1f5f9;
+            width: 200px;
+            outline: none;
+            transition: 0.2s;
+            font-size: 1rem;
+        }
+
+        input[type="text"]:focus {
+            border-color: #38bdf8;
+            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
+        }
+
+        button {
+            padding: 12px 30px;
+            border-radius: 12px;
+            border: none;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        #verifyBtn {
+            background: #334155;
+            color: #e2e8f0;
+        }
+
+        #verifyBtn:hover {
+            background: #475569;
+        }
+
+        #downloadBtn {
+            background: #38bdf8;
+            color: #0f172a;
+            box-shadow: 0 4px 15px rgba(56, 189, 248, 0.3);
+            opacity: 0.6;
+            cursor: not-allowed;
+            flex-grow: 1;
+            min-width: 150px;
+        }
+
+        #downloadBtn.active {
+            opacity: 1;
+            cursor: pointer;
+        }
+
+        #downloadBtn.active:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(56, 189, 248, 0.5);
+        }
+
+        #message {
+            margin-top: 15px;
+            font-size: 0.95rem;
+            min-height: 24px;
+        }
+
+        .msg-success { color: #4ade80; }
+        .msg-error { color: #f87171; }
+
+        /* Przycisk Discord */
+        .discord-container {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .discord-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: #5865F2; /* Kolor Discord */
+            color: #ffffff;
+            padding: 12px 25px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 15px rgba(88, 101, 242, 0.3);
+        }
+
+        .discord-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(88, 101, 242, 0.5);
+            background: #4752c4;
+        }
+
+        /* Stopka */
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            color: #475569;
+            font-size: 0.8rem;
+            border-top: 1px solid #1e293b;
+            padding-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Nagłówek -->
+        <div class="header">
+            <div class="logo-container">
+                <img src="https://i.imgur.com/dNvJ2qr.png" alt="SlimSearch Logo">
+            </div>
+            <h1>SlimSearch</h1>
+            <div class="tagline">Search Smarter, Browse Faster.</div>
+        </div>
+
+        <div class="content">
+            <!-- Opis -->
+            <section>
+                <h2>🌊 Przeglądarka przyszłości</h2>
+                <p><strong>SlimSearch</strong> to nowoczesna, lekka i szybka przeglądarka internetowa zaprojektowana z myślą o płynnym przeglądaniu i wydajnym wyszukiwaniu.</p>
+            </section>
+
+            <!-- Funkcje -->
+            <section>
+                <h2>🚀 Funkcje</h2>
+                <ul>
+                    <li>⚡ Błyskawiczne ładowanie stron</li>
+                    <li>🔍 Wbudowana funkcja wyszukiwania</li>
+                    <li>🎨 Czysty i nowoczesny interfejs</li>
+                    <li>🔒 Bezpieczne przeglądanie</li>
+                    <li>💻 Niskie zużycie zasobów</li>
+                    <li>🚀 Zoptymalizowana wydajność</li>
+                </ul>
+            </section>
+
+            <!-- Instalacja i Wymagania -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <section>
+                    <h2>📦 Instalacja</h2>
+                    <p>1. Pobierz najnowszą wersję.<br>2. Zainstaluj lub zbuduj projekt.<br>3. Uruchom SlimSearch.</p>
+                </section>
+                <section>
+                    <h2>🛠 Wymagania</h2>
+                    <ul style="display: block;">
+                        <li>Windows 10/11</li>
+                        <li>Połączenie internetowe</li>
+                        <li>Zalecane 2 GB RAM</li>
+                    </ul>
+                </section>
+            </div>
+
+            <!-- Cel i Misja -->
+            <section>
+                <h2>🎯 Cel projektu</h2>
+                <p>SlimSearch ma na celu zapewnienie lekkiego, przyjaznego dla użytkownika i wydajnego przeglądania bez zbędnej złożoności. Stawia na szybkość, prostotę i niezawodność.</p>
+                <p style="font-size: 0.95rem; color: #94a3b8; margin-top: 10px;">Licencja MIT. Zapraszamy do zgłaszania błędów i sugestii.</p>
+            </section>
+
+            <!-- Pobieranie i Kod Beta -->
+            <div class="download-box">
+                <div class="beta-status">🔷 SlimSearch jest obecnie w fazie <strong>BETA</strong></div>
+                <p style="margin-bottom: 5px;">Wpisz jeden z kodów beta, aby odblokować przycisk pobierania.</p>
+                <p style="font-size: 0.85rem; color: #64748b;">(Dostępne kody: np. <strong>SLIM2026</strong>, <strong>Slim31aBeta</strong> lub <strong>Slim57b3beta</strong>)</p>
+                
+                <div class="input-group">
+                    <input type="text" id="betaCode" placeholder="Wpisz kod beta...">
+                    <button id="verifyBtn">Zweryfikuj kod</button>
+                    <button id="downloadBtn" disabled>⬇️ Pobierz SlimSearch</button>
+                </div>
+                <div id="message"></div>
+
+                <!-- Sekcja Discord -->
+                <div class="discord-container">
+                    <a href="https://discord.gg/5yQuqUTdf3" target="_blank" class="discord-btn">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037 15.258 15.258 0 0 0-.678 1.41 19.715 19.715 0 0 0-5.358 0 13.78 13.78 0 0 0-.678-1.41.074.074 0 0 0-.079-.037 19.791 19.791 0 0 0-4.885 1.515.069.069 0 0 0-.032.028C2.52 6.852 1.5 10.186 1.528 13.484a.074.074 0 0 0 .028.056 19.813 19.813 0 0 0 5.9 2.987.074.074 0 0 0 .08-.027 15.182 15.182 0 0 0 1.2-1.967.074.074 0 0 0-.027-.079 13.152 13.152 0 0 1-1.847-1.046.074.074 0 0 1-.007-.109 1.56 1.56 0 0 0 .03-.024c.028-.022.058-.044.088-.066a.074.074 0 0 1 .08-.008 13.375 13.375 0 0 0 11.194 0 .074.074 0 0 1 .08.008c.03.022.06.044.088.066a.074.074 0 0 1-.007.109 12.72 12.72 0 0 1-1.847 1.046.074.074 0 0 0-.027.079c.36.69.756 1.347 1.2 1.967a.074.074 0 0 0 .08.027 19.81 19.81 0 0 0 5.9-2.987.074.074 0 0 0 .028-.056c.028-3.593-.992-6.927-2.51-9.085a.07.07 0 0 0-.032-.028zM8.78 11.59c-.828 0-1.528-.6-1.528-1.357s.67-1.356 1.528-1.356c.858 0 1.528.6 1.528 1.356s-.67 1.357-1.528 1.357zm6.44 0c-.828 0-1.528-.6-1.528-1.357s.67-1.356 1.528-1.356c.858 0 1.528.6 1.528 1.356s-.67 1.357-1.528 1.357z"/>
+                        </svg>
+                        Dołącz do nas na Discord
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            &copy; 2026 SlimSearch. Wszystkie prawa zastrzeżone. <br>
+            <i>SlimSearch — Search Smarter, Browse Faster.</i>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const betaInput = document.getElementById('betaCode');
+            const verifyBtn = document.getElementById('verifyBtn');
+            const downloadBtn = document.getElementById('downloadBtn');
+            const messageDiv = document.getElementById('message');
+
+            // Tablica poprawnych kodów beta (dodano 3 nowe kody)
+            const VALID_BETA_CODES = [
+                "SLIM2026", 
+                "Slim31aBeta", 
+                "Slim57b3beta", 
+                "Slim94114beta"
+            ];
+
+            // Funkcja wyświetlająca komunikaty
+            const setMessage = (text, type) => {
+                messageDiv.textContent = text;
+                messageDiv.className = type; // 'msg-success' lub 'msg-error'
+                setTimeout(() => {
+                    if(messageDiv.textContent === text) {
+                        messageDiv.textContent = '';
+                        messageDiv.className = '';
+                    }
+                }, 4000);
+            };
+
+            // Weryfikacja kodu
+            const verifyCode = () => {
+                const code = betaInput.value.trim();
+                
+                if (code === '') {
+                    setMessage('Proszę wprowadzić kod beta.', 'msg-error');
+                    return;
+                }
+
+                // Sprawdzanie czy kod znajduje się w tablicy
+                if (VALID_BETA_CODES.includes(code)) {
+                    downloadBtn.disabled = false;
+                    downloadBtn.classList.add('active');
+                    setMessage('✅ Kod poprawny! Przycisk pobierania został odblokowany.', 'msg-success');
+                    betaInput.style.borderColor = '#4ade80';
+                } else {
+                    downloadBtn.disabled = true;
+                    downloadBtn.classList.remove('active');
+                    setMessage('❌ Błędny kod beta. Spróbuj ponownie.', 'msg-error');
+                    betaInput.style.borderColor = '#f87171';
+                    setTimeout(() => betaInput.style.borderColor = '#334155', 2000);
+                }
+            };
+
+            // Obsługa zdarzenia weryfikacji
+            verifyBtn.addEventListener('click', verifyCode);
+
+            // Naciśnięcie Enter w polu input
+            betaInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    verifyCode();
+                }
+            });
+
+            // Symulacja pobierania
+            downloadBtn.addEventListener('click', () => {
+                if (!downloadBtn.disabled) {
+                    setMessage('📥 Rozpoczynanie pobierania SlimSearch Beta...', 'msg-success');
+                    
+                    // W rzeczywistości, tutaj wkleiłbyś właściwy link do pliku .exe:
+                    // window.location.href = 'https://twojadomena.pl/SlimSearch_Beta.exe';
+                    setTimeout(() => {
+                        alert('🔗 W wersji produkcyjnej: Pobieranie SlimSearch_Beta.exe zostało rozpoczęte!\n(Dzięki za testowanie kodu beta)');
+                    }, 500);
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
